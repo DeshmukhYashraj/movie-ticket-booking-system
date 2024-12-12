@@ -13,6 +13,6 @@ public class MovieTicketBookingApp {
 		logger.debug("main method");
 		AdminModel.OperationAdmin();
 		System.out.println("CHange  zalay ka bg");
-		System.out.println("jhal jhal jhal");
+
 	}
 }
