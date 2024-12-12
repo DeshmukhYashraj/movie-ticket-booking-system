@@ -8,10 +8,9 @@ import com.movie.operator.AdminModel;
 
 public class MovieTicketBookingApp extends DBState {
 
-	static AdminModel admin = new AdminModel();
 	static Logger logger = LoggerApp.getLogger();
 
 	public static void main(String[] args) {
-		admin.adminOperator();
+		AdminModel.OperationAdmin();
 	}
 }

@@ -11,7 +11,7 @@ public class AdminModel {
 
 	static Logger logger = LoggerApp.getLogger();
 
-	public void adminOperator() {
+	public static void OperationAdmin() {
 		Scanner scn = new Scanner(System.in);
 		do {
 			System.out.println("<<Welcome Admin>>");
@@ -19,9 +19,7 @@ public class AdminModel {
 			int value = scn.nextInt();
 			switch (value) {
 			case 1: {
-				System.out.println("Enter Language Name :: ");
-				String langName = scn.nextLine();
-				Language lang = new Language(langName);
+				AdminOperation.addLanguage();
 				break;
 			}
 			default:
