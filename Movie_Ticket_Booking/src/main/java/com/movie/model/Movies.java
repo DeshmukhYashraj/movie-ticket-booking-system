@@ -13,5 +13,6 @@ public class Movies {
 	private String movieGenre;
 	private LocalDateTime duration;
 	private Integer languageId;
+	private LocalDateTime date;
 
 }
