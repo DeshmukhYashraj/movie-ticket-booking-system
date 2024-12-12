@@ -22,5 +22,6 @@ public class MovieTicketBookingApp extends DBState {
 			e.printStackTrace();
 		}
 
+		System.out.println("Project completed");
 	}
 }

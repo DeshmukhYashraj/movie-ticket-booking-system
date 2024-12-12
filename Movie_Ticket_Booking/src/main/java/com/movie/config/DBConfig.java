@@ -18,7 +18,7 @@ public class DBConfig {
 		System.out.println("DBConfig.DBConfig()");
 		try {
 			Properties prop = new Properties();
-			File f = new File("src/main/java/com/sp/commons/application.properties");
+			File f = new File("src/main/java/com/movie/commons/application.properties");
 			FileInputStream fis = new FileInputStream(f);
 			prop.load(fis);
 //			String driver = prop.getProperty("driver");
