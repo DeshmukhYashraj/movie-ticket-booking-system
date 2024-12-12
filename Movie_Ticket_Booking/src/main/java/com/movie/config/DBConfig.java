@@ -15,7 +15,6 @@ public class DBConfig {
 	private static DBConfig db = null;
 
 	private DBConfig() {
-		System.out.println("DBConfig.DBConfig()");
 		try {
 			Properties prop = new Properties();
 			File f = new File("src/main/java/com/movie/commons/application.properties");
