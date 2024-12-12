@@ -22,13 +22,9 @@ public class AddMovieRepositoryLanguage extends DBState implements IAddMovieRepo
 			ps = con.prepareStatement(ADD_LANGUAGE);
 			ps.setString(1, lang.getLangName());
 			value = ps.executeUpdate();
-			if (value > 0) {
-				return value;
-			} else {
-				return 0;
-			}
+			return value > 0 ? value : 0;
 		} catch (SQLException e) {
-			logger.fatal("Data Base Connection Failed..." + e.getMessage());
+			logger.fatal("Internal Problems..." + e.getMessage());
 		}
 		return value;
 	}
