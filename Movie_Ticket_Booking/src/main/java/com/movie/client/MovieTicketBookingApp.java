@@ -2,11 +2,10 @@ package com.movie.client;
 
 import org.apache.log4j.Logger;
 
-import com.movie.config.DBState;
 import com.movie.config.LoggerApp;
 import com.movie.operator.AdminModel;
 
-public class MovieTicketBookingApp extends DBState {
+public class MovieTicketBookingApp {
 
 	static Logger logger = LoggerApp.getLogger();
 
