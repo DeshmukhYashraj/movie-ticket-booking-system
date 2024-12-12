@@ -10,6 +10,7 @@ public class MovieTicketBookingApp {
 	static Logger logger = LoggerApp.getLogger();
 
 	public static void main(String[] args) {
+		logger.debug("main method");
 		AdminModel.OperationAdmin();
 		System.out.println("CHange  zalay ka bg");
 	}
