@@ -15,10 +15,24 @@ public class AdminModel {
 		do {
 			System.out.println("<<Welcome Admin>>");
 			System.out.println("1 :: Add Movie Language :: ");
+			System.out.println("2 :: Show Available Movie Language :: ");
+			System.out.println("4 :: Delete Movie Language :: ");
 			int value = scn.nextInt();
 			switch (value) {
 			case 1: {
 				AdminOperation.addLanguage();
+				break;
+			}
+			case 2: {
+				AdminOperation.showLanguage();
+				break;
+			}
+			case 3: {
+//				AdminOperation.deleteLanguage();
+				break;
+			}
+			case 4: {
+				AdminOperation.deleteLanguage();
 				break;
 			}
 			default:
