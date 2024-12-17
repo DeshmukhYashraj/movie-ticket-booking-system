@@ -13,6 +13,37 @@ public class AdminOperationImpl {
 	public static void AddMovieDetails() {
 		do {
 			System.out.println("<<Welcome Admin>>");
+			System.out.println("1 :: Movie Language :: ");
+			System.out.println("2 :: Movie Genre :: ");
+			System.out.println("3 :: Movie Details :: ");
+			int value = scn.nextInt();
+			switch (value) {
+			case 1: {
+				AdminOperationImpl.manageLanguage();
+				break;
+			}
+			case 2: {
+				AdminOperationImpl.manageGenres();
+				break;
+			}
+			case 3: {
+//				AdminOperationImpl.updateLanguage();
+				break;
+			}
+			case 4: {
+				System.out.println("Exiting Movies Management... Goodbye!");
+				return;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + value);
+			}
+		} while (true);
+
+	}
+
+	public static void manageLanguage() {
+		do {
+			System.out.println("<<Welcome Admin>>");
 			System.out.println("1 :: Add Movie Language :: ");
 			System.out.println("2 :: Show Available Movie Language :: ");
 			System.out.println("2 :: Update Movie Language :: ");
@@ -35,11 +66,54 @@ public class AdminOperationImpl {
 				AdminOperation.deleteLanguage();
 				break;
 			}
+			case 5: {
+				System.out.println("Exiting Language Management... Goodbye!");
+				return;
+			}
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + value);
 			}
 		} while (true);
+	}
 
+	public static void manageGenres() {
+
+		do {
+			System.out.println("<< Welcome Admin >>");
+			System.out.println("1 :: Add Movie Genre");
+			System.out.println("2 :: Show Available Movie Genres");
+			System.out.println("3 :: Update Movie Genre");
+			System.out.println("4 :: Delete Movie Genre");
+			System.out.println("5 :: Exit");
+
+			int value = scn.nextInt();
+			scn.nextLine(); // Consume the newline character
+
+			switch (value) {
+			case 1: {
+				AdminOperation.addGenre();
+				break;
+			}
+			case 2: {
+				AdminOperation.showGenres();
+				break;
+			}
+			case 3: {
+				AdminOperation.updateGenre();
+				break;
+			}
+			case 4: {
+				AdminOperation.deleteGenre();
+				break;
+			}
+			case 5: {
+				System.out.println("Exiting Genre Management... Goodbye!");
+				return; // Exit the loop
+			}
+			default:
+				System.out.println("Invalid choice! Please select a valid option.");
+			}
+		} while (true);
 	}
 
 }

@@ -16,6 +16,7 @@ public class AdminModel {
 			System.out.println("<<Welcome Admin>>");
 			System.out.println("1 :: Add Movie Details :: ");
 			System.out.println("2 :: Add Cinema Details :: ");
+			System.out.println("5 :: Exit");
 			int value = scn.nextInt();
 			switch (value) {
 			case 1: {
@@ -24,6 +25,11 @@ public class AdminModel {
 			}
 			case 2: {
 //				AdminOperationImpl.AddCinemaDetails();
+				break;
+			}
+			case 5: {
+				System.out.println("Exiting Genre Management... Goodbye!");
+				return;
 			}
 
 			default:

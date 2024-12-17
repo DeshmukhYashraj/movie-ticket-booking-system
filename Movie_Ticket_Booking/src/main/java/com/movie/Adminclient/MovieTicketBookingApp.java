@@ -1,4 +1,4 @@
-package com.movie.client;
+package com.movie.Adminclient;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +12,6 @@ public class MovieTicketBookingApp {
 	public static void main(String[] args) {
 		logger.debug("main method");
 		AdminModel.OperationAdmin();
-		System.out.println("CHange  zalay ka bg");
 
 	}
 }
