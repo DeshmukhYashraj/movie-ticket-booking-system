@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.movie.model.Genre;
 import com.movie.model.Language;
+import com.movie.model.Movies;
 
 public interface IAddMovieRepository {
 	public int addMovieLanguage(Language lang);
@@ -21,5 +22,13 @@ public interface IAddMovieRepository {
 	public int addMovieGenre(Genre genre);
 
 	public int removeMovieGenre(Genre genre);
+
+	public int addMovie(Movies movie);
+
+	public List<Movies> getAllMovies();
+
+	public int updateMovie(Movies updatedMovie);
+
+	public int removeMovie(int movieId);
 
 }

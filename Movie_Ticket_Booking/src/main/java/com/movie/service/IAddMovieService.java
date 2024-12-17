@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.movie.model.Genre;
 import com.movie.model.Language;
+import com.movie.model.Movies;
 
 public interface IAddMovieService {
 
@@ -22,5 +23,13 @@ public interface IAddMovieService {
 	public int updateMovieGenre(String oldName, String newName);
 
 	public int removeMovieGenre(Genre genre);
+
+	public int addMovie(Movies movie);
+
+	public List<Movies> getAllMovies();
+
+	public int updateMovie(Movies updatedMovie);
+
+	public int removeMovie(int movieId);
 
 }

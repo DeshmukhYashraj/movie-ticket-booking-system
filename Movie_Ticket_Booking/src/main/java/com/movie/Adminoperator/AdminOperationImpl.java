@@ -16,6 +16,7 @@ public class AdminOperationImpl {
 			System.out.println("1 :: Movie Language :: ");
 			System.out.println("2 :: Movie Genre :: ");
 			System.out.println("3 :: Movie Details :: ");
+			System.out.println("4 :: Exit");
 			int value = scn.nextInt();
 			switch (value) {
 			case 1: {
@@ -27,7 +28,7 @@ public class AdminOperationImpl {
 				break;
 			}
 			case 3: {
-//				AdminOperationImpl.updateLanguage();
+				AdminOperationImpl.manageMovies();
 				break;
 			}
 			case 4: {
@@ -77,7 +78,6 @@ public class AdminOperationImpl {
 	}
 
 	public static void manageGenres() {
-
 		do {
 			System.out.println("<< Welcome Admin >>");
 			System.out.println("1 :: Add Movie Genre");
@@ -116,4 +116,45 @@ public class AdminOperationImpl {
 		} while (true);
 	}
 
+	public static void manageMovies() {
+		do {
+			System.out.println("<<Welcome Admin>>");
+			System.out.println("1 :: Add Movie :: ");
+			System.out.println("2 :: Show Available Movies :: ");
+			System.out.println("3 :: Update Movie :: ");
+			System.out.println("4 :: Delete Movie :: ");
+			System.out.println("5 :: Exit Movie Management :: ");
+			int value = scn.nextInt();
+			scn.nextLine(); // consume the newline character after nextInt
+
+			switch (value) {
+			case 1: {
+				// Add Movie
+				AdminOperation.addMovies();
+				break;
+			}
+			case 2: {
+				// Show Movies
+				AdminOperation.showMovies();
+				break;
+			}
+			case 3: {
+				// Update Movie
+				AdminOperation.updateMovie();
+				break;
+			}
+			case 4: {
+				// Delete Movie
+				AdminOperation.deleteMovie();
+				break;
+			}
+			case 5: {
+				System.out.println("Exiting Movie Management... Goodbye!");
+				return; // Exit
+			}
+			default:
+				System.out.println("Invalid option. Please try again.");
+			}
+		} while (true);
+	}
 }

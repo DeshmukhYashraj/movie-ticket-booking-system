@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.movie.model.Genre;
 import com.movie.model.Language;
+import com.movie.model.Movies;
 import com.movie.repository.AddMovieRepositoryImpl;
 import com.movie.repository.IAddMovieRepository;
 
@@ -57,4 +58,25 @@ public class AddMovieServiceImpl implements IAddMovieService {
 		// Call repository method to remove genre
 		return movieRepo.removeMovieGenre(genre);
 	}
+
+	@Override
+	public int addMovie(Movies movie) {
+		return movieRepo.addMovie(movie);
+	}
+
+	@Override
+	public List<Movies> getAllMovies() {
+		return movieRepo.getAllMovies();
+	}
+
+	@Override
+	public int updateMovie(Movies updatedMovie) {
+		return movieRepo.updateMovie(updatedMovie);
+	}
+
+	@Override
+	public int removeMovie(int movieId) {
+		return movieRepo.removeMovie(movieId);
+	}
+
 }

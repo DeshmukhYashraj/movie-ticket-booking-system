@@ -10,6 +10,7 @@ import com.movie.config.DBState;
 import com.movie.config.LoggerApp;
 import com.movie.model.Genre;
 import com.movie.model.Language;
+import com.movie.model.Movies;
 
 public class AddMovieRepositoryImpl extends DBState implements IAddMovieRepository {
 
@@ -26,6 +27,17 @@ public class AddMovieRepositoryImpl extends DBState implements IAddMovieReposito
 	private static final String DELETE_GENRE = "DELETE FROM GENRES WHERE GENRE_NAME = ?;";
 	private static final String GET_GENREID_BY_NAME = "SELECT GENRE_ID FROM GENRES WHERE GENRE_NAME = ?";
 	private static final String UPDATE_GENRE = "UPDATE GENRES SET GENRE_NAME = ? WHERE GENRE_ID = ?;";
+
+	// Genre-related SQL queries
+	private static final String ADD_MOVIE = "INSERT INTO MOVIES (TITLE, DURATION, LANGUAGE_ID, RELEASE_DATE, GENRE_ID) "
+			+ "VALUES (?, ?, (SELECT language_id FROM languages WHERE language_name = ?), ?, "
+			+ "(SELECT genre_id FROM genres WHERE genre_name = ?));";
+
+	private static final String SHOW_MOVIES = "SELECT m.movie_id, m.title, m.duration, m.language_id, l.language_name, m.release_date, m.genre_id, g.genre_name "
+			+ "FROM movies m " + "JOIN languages l ON m.language_id = l.language_id "
+			+ "JOIN genres g ON m.genre_id = g.genre_id";
+	private static final String UPDATE_MOVIE = "UPDATE MOVIES SET TITLE = ?, DURATION = ?, LANGUAGE_ID = ?, RELEASE_DATE = ?, GENRE_ID = ? WHERE MOVIE_ID = ?";
+	private static final String DELETE_MOVIE = "DELETE FROM MOVIES WHERE MOVIE_ID = ?";
 
 	Logger logger = LoggerApp.getLogger();
 
@@ -183,4 +195,153 @@ public class AddMovieRepositoryImpl extends DBState implements IAddMovieReposito
 		}
 		return value;
 	}
+
+	@Override
+	public int addMovie(Movies movie) {
+		try {
+
+			ps = con.prepareStatement(ADD_MOVIE);
+
+			ps.setString(1, movie.getTitle()); // Set the title
+			ps.setTime(2, movie.getDuration()); // Set the duration
+			ps.setString(3, movie.getLanguage()); // Set the language name
+			ps.setDate(4, movie.getReleaseDate()); // Set the release date
+			ps.setString(5, movie.getGenreName()); // Set the genre name
+
+			int result = ps.executeUpdate();
+			return result > 0 ? result : -1; // Return the number of affected rows, or -1 if no rows were affected
+		} catch (SQLException e) {
+			logger.fatal("Error adding movie: " + e.getMessage());
+		}
+		return 0; // Return 0 if an error occurs
+	}
+
+	@Override
+	public List<Movies> getAllMovies() {
+		List<Movies> movies = new ArrayList<>();
+		try {
+
+			ps = con.prepareStatement(SHOW_MOVIES);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Language language = new Language(rs.getInt("language_id"), rs.getString("language_name"));
+				Genre genre = new Genre(rs.getInt("genre_id"), rs.getString("genre_name"));
+
+				Movies movie = new Movies(rs.getInt("movie_id"), // movie_id
+						rs.getString("title"), // title
+						rs.getTime("duration"), // duration
+						language, // Language object
+						rs.getDate("release_date"), // release_date
+						genre // Genre object
+				);
+
+				movies.add(movie);
+			}
+			return movies;
+		} catch (SQLException e) {
+			logger.fatal("Error fetching movies: " + e.getMessage());
+		}
+		return movies; // Return empty list if an error occurs
+	}
+
+	/*@Override
+	public int updateMovie(Movies updatedMovie) {
+		try {
+			ps = con.prepareStatement(UPDATE_MOVIE);
+	
+			ps.setString(1, updatedMovie.getTitle()); // Set the title
+			ps.setTime(2, updatedMovie.getDuration()); // Set the duration
+			ps.setString(3, updatedMovie.getLanguage()); // Set the language name
+			ps.setDate(4, updatedMovie.getReleaseDate()); // Set the release date
+			ps.setString(5, updatedMovie.getGenreName()); // Set the genre name
+			ps.setInt(6, updatedMovie.getMovieId()); // Set the movie ID to update
+	
+			int result = ps.executeUpdate();
+			return result > 0 ? result : -1;
+		} catch (SQLException e) {
+			logger.fatal("Error updating movie: " + e.getMessage());
+		}
+		return 0; // Return 0 if an error occurs
+	}*/
+
+	@Override
+	public int updateMovie(Movies updatedMovie) {
+		try {
+			// Retrieve language_id based on the language name
+			String languageName = updatedMovie.getLanguage(); // Get language name from movie object
+			int languageId = getLanguageIdByName(languageName); // Fetch language_id from the database
+
+			// Retrieve genre_id based on the genre name
+			String genreName = updatedMovie.getGenreName(); // Get genre name from movie object
+			int genreId = getGenreIdByName(genreName); // Fetch genre_id from the database
+
+			// Prepare the update SQL query
+			String query = "UPDATE movies SET title = ?, duration = ?, language_id = ?, release_date = ?, genre_id = ? WHERE movie_id = ?";
+
+			ps = con.prepareStatement(query);
+			ps.setString(1, updatedMovie.getTitle()); // Set title
+			ps.setTime(2, updatedMovie.getDuration()); // Set duration
+			ps.setInt(3, languageId); // Set language_id (from retrieved languageId)
+			ps.setDate(4, updatedMovie.getReleaseDate()); // Set release date
+			ps.setInt(5, genreId); // Set genre_id (from retrieved genreId)
+			ps.setInt(6, updatedMovie.getMovieId()); // Set movie_id for updating the specific movie
+
+			// Execute the update query
+			int result = ps.executeUpdate();
+			return result > 0 ? result : -1; // Return number of rows affected (or -1 if no update occurred)
+		} catch (SQLException e) {
+			logger.fatal("Error updating movie: " + e.getMessage());
+		}
+		return 0; // Return 0 if an error occurs
+	}
+
+	// Helper method to get language_id based on language_name
+	private int getLanguageIdByName(String languageName) {
+		try {
+			String query = "SELECT language_id FROM languages WHERE language_name = ?";
+			ps = con.prepareStatement(query);
+			ps.setString(1, languageName); // Set the language name in the query
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("language_id"); // Return the corresponding language_id
+			}
+		} catch (SQLException e) {
+			logger.fatal("Error fetching language_id for language_name: " + e.getMessage());
+		}
+		return 0; // Return 0 if no matching language is found
+	}
+
+	// Helper method to get genre_id based on genre_name
+	private int getGenreIdByName(String genreName) {
+		try {
+			String query = "SELECT genre_id FROM genres WHERE genre_name = ?";
+			ps = con.prepareStatement(query);
+			ps.setString(1, genreName); // Set the genre name in the query
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("genre_id"); // Return the corresponding genre_id
+			}
+		} catch (SQLException e) {
+			logger.fatal("Error fetching genre_id for genre_name: " + e.getMessage());
+		}
+		return 0; // Return 0 if no matching genre is found
+	}
+
+	@Override
+	public int removeMovie(int movieId) {
+		try {
+			ps = con.prepareStatement(DELETE_MOVIE);
+			ps.setInt(1, movieId);
+
+			int result = ps.executeUpdate();
+			return result > 0 ? result : 0; // Return the number of affected rows
+		} catch (SQLException e) {
+			logger.fatal("Error removing movie: " + e.getMessage());
+		}
+		return 0;
+	}
+
 }
