@@ -1,4 +1,4 @@
-package com.movie.operator;
+package com.movie.Adminoperator;
 
 import java.util.List;
 import java.util.Scanner;
@@ -31,6 +31,15 @@ public class AdminOperation {
 		} else {
 			logger.info("No Record Found...");
 		}
+	}
+
+	public static void updateLanguage() {
+		System.out.println("Enter Old Language Name :: ");
+		String oldName = scn.nextLine();
+		System.out.println("Enter New Language Name :: ");
+		String newName = scn.nextLine();
+		int value = movieService.updateMovieLanguage(oldName, newName);
+		System.out.println(value > 0 ? "Language UPDATED Successfully.." : "Laguage not updated..");
 	}
 
 	public static void deleteLanguage() {

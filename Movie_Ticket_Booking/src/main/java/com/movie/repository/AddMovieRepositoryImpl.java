@@ -15,12 +15,12 @@ public class AddMovieRepositoryImpl extends DBState implements IAddMovieReposito
 	private static final String ADD_LANGUAGE = "INSERT INTO LANGUAGES (LANGUAGE_NAME) VALUES(?);";
 	private static final String SHOW_LANGUAGE = "SELECT * FROM LANGUAGES";
 	private static final String DELETE_LANGUAGE = "DELETE FROM LANGUAGES WHERE LANGUAGE_NAME = ?; ";
+	private static final String GET_LANGID_BY_NAME = "SELECT LANGUAGE_ID FROM LANGUAGES WHERE LANGUAGE_NAME = ?";
+	private static final String UPDATE_LANGUAGE = "UPDATE LANGUAGES SET LANGUAGE_NAME = ? WHERE LANGUAGE_ID = ?;";
 	Logger logger = LoggerApp.getLogger();
 
-	// add language
 	@Override
 	public int addMovieLanguage(Language lang) {
-//		con = DBConfig.getCon();
 		int value = 0;
 		try {
 			ps = con.prepareStatement(ADD_LANGUAGE);
@@ -65,8 +65,35 @@ public class AddMovieRepositoryImpl extends DBState implements IAddMovieReposito
 		return value;
 	}
 
+	public int getLanguageByName(String name) {
+		int value = -1;
+		try {
+			ps = con.prepareStatement(GET_LANGID_BY_NAME);
+
+			ps.setString(1, name);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				value = rs.getInt(1); // Retrieve language_id
+			}
+		} catch (SQLException e) {
+			logger.fatal("Error while fetching language ID: " + e.getMessage());
+		}
+		return value;
+	}
+
 	@Override
-	public int updateMovieLanguage(Language lang) {
+	public int updateMovieLanguage(String oldName, String newName) {
+		try {
+			int value = getLanguageByName(oldName);
+			ps = con.prepareStatement(UPDATE_LANGUAGE);
+			ps.setString(1, newName);
+			ps.setInt(2, value);
+			value = ps.executeUpdate();
+			return value > 0 ? value : -1;
+		} catch (SQLException e) {
+			logger.fatal("Internal Problems..." + e.getMessage());
+		}
 		return 0;
 	}
 

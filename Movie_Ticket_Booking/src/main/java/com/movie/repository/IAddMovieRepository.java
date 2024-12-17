@@ -11,6 +11,6 @@ public interface IAddMovieRepository {
 
 	public int removeMovieLanguage(Language lang);
 
-	public int updateMovieLanguage(Language lang);
+	public int updateMovieLanguage(String oldName, String newName);
 
 }

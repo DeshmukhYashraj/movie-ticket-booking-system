@@ -1,4 +1,4 @@
-package com.movie.operator;
+package com.movie.Adminoperator;
 
 public class UserModel {
 

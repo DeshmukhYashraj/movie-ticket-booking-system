@@ -2,8 +2,8 @@ package com.movie.client;
 
 import org.apache.log4j.Logger;
 
+import com.movie.Adminoperator.AdminModel;
 import com.movie.config.LoggerApp;
-import com.movie.operator.AdminModel;
 
 public class MovieTicketBookingApp {
 

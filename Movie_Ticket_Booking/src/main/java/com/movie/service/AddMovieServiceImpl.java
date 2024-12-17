@@ -26,8 +26,7 @@ public class AddMovieServiceImpl implements IAddMovieService {
 	}
 
 	@Override
-	public int updateMovieLanguage(Language lang) {
-		return 0;
+	public int updateMovieLanguage(String oldName, String newName) {
+		return movieRepo.updateMovieLanguage(oldName, newName);
 	}
-
 }
