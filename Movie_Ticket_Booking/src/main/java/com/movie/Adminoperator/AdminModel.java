@@ -1,4 +1,4 @@
-package com.movie.operator;
+package com.movie.Adminoperator;
 
 import java.util.Scanner;
 
@@ -14,13 +14,24 @@ public class AdminModel {
 	public static void OperationAdmin() {
 		do {
 			System.out.println("<<Welcome Admin>>");
-			System.out.println("1 :: Add Movie Language :: ");
+			System.out.println("1 :: Add Movie Details :: ");
+			System.out.println("2 :: Add Cinema Details :: ");
+			System.out.println("5 :: Exit");
 			int value = scn.nextInt();
 			switch (value) {
 			case 1: {
-				AdminOperation.addLanguage();
+				AdminOperationImpl.AddMovieDetails();
 				break;
 			}
+			case 2: {
+//				AdminOperationImpl.AddCinemaDetails();
+				break;
+			}
+			case 5: {
+				System.out.println("Exiting Genre Management... Goodbye!");
+				return;
+			}
+
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + value);
 			}

@@ -1,9 +1,9 @@
-package com.movie.client;
+package com.movie.Adminclient;
 
 import org.apache.log4j.Logger;
 
+import com.movie.Adminoperator.AdminModel;
 import com.movie.config.LoggerApp;
-import com.movie.operator.AdminModel;
 
 public class MovieTicketBookingApp {
 
@@ -11,8 +11,7 @@ public class MovieTicketBookingApp {
 
 	public static void main(String[] args) {
 		logger.debug("main method");
-//		AdminModel.OperationAdmin();
-		System.out.println("Hello ");
+		AdminModel.OperationAdmin();
 
 	}
 }
