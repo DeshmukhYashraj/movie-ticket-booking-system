@@ -19,9 +19,9 @@ public class Movies {
 	private int movieId;
 	private String title;
 	private Time duration;
-	private Language language; // This holds the Language object
+	private Language language; 
 	private Date releaseDate;
-	private Genre genre; // This holds the Genre object
+	private Genre genre; 
 
 	// Constructor with Language and Genre objects
 	public Movies(int movieId, String title, Time duration, Language language, Date releaseDate, Genre genre) {

@@ -7,12 +7,20 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class Language {
 
 	private Integer langId;
-	@NonNull
 	private String langName;
+	
+	 // Constructor
+    public Language(String langName) {
+        this.langName = langName;
+    }
+
+    // Getter
+    public String getLangName() {
+        return langName;
+    }
 }

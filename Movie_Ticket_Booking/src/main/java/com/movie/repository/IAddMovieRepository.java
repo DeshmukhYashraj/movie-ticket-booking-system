@@ -31,4 +31,8 @@ public interface IAddMovieRepository {
 
 	public int removeMovie(int movieId);
 
+	public Movies getMovieById(int movieId);
+
 }
+
+

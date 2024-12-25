@@ -1,46 +1,66 @@
 package com.movie.Adminoperator;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import com.movie.config.LoggerApp;
+import com.movie.model.Cinema;
+//import com.movie.config.LoggerApp;
 import com.movie.model.Genre;
 import com.movie.model.Language;
 import com.movie.model.Movies;
+import com.movie.model.Seat;
+import com.movie.model.Showtime;
+import com.movie.repository.AddCinemaRepositoryImpl;
+import com.movie.repository.IAddCinemaRepository;
+import com.movie.service.AddCinemaServiceImpl;
 import com.movie.service.AddMovieServiceImpl;
+import com.movie.service.IAddCinemaService;
 import com.movie.service.IAddMovieService;
+import com.movie.service.IAddSeatService;
+import com.movie.service.IShowtimeService;
+import com.movie.service.SeatServiceImpl;
+import com.movie.service.ShowtimeServiceImpl;
 
 public class AdminOperation {
 	static Scanner scn = new Scanner(System.in);
 	static IAddMovieService movieService = new AddMovieServiceImpl();
-	static Logger logger = LoggerApp.getLogger();
+	static IAddCinemaService cinemaService = new AddCinemaServiceImpl();
+	static IAddSeatService seatService = new SeatServiceImpl();
+	static IShowtimeService showtimeService = new ShowtimeServiceImpl();
+//	static Logger logger = LoggerApp.getLogger();
 
 	// Method for adding a new language
 	public static void addLanguage() {
+		showLanguage();
 		System.out.println("Enter Language Name :: ");
 		String langName = scn.nextLine();
 		Language lang = new Language(langName);
 		int value = movieService.addMovieLanguage(lang);
-		System.out.println(value > 0 ? "Language Added Successfully.." : "Language not added..");
+		System.out.println(value > 0 ? "\nLanguage Added Successfully.." : "\nLanguage not added..");
 	}
 
 	// Method for displaying all languages
 	public static void showLanguage() {
+		System.out.println("=========================");
 		System.out.println("Language Details Are :: ");
 		List<Language> languages = movieService.getAllLanguage();
 		if (languages != null) {
 			languages.forEach(System.out::println);
 		} else {
-			logger.info("No Record Found...");
+			System.out.println("No Record Found.");
+//			logger.info("No Record Found...");
 		}
+		System.out.println("=========================");
 	}
 
 	// Method for updating an existing language
 	public static void updateLanguage() {
+		showLanguage();
 		System.out.println("Enter Old Language Name :: ");
 		String oldName = scn.nextLine();
 		System.out.println("Enter New Language Name :: ");
@@ -51,6 +71,7 @@ public class AdminOperation {
 
 	// Method for deleting a language
 	public static void deleteLanguage() {
+		showLanguage();
 		System.out.println("Enter Language Name :: ");
 		String langName = scn.nextLine();
 		int value = movieService.removeMovieLanguage(new Language(langName));
@@ -59,26 +80,32 @@ public class AdminOperation {
 
 	// Method for adding a new genre
 	public static void addGenre() {
+		showGenres();
 		System.out.println("Enter Genre Name :: ");
 		String genreName = scn.nextLine();
-		Genre genre = new Genre(genreName); // Assuming Genre constructor is similar to Language
+		Genre genre = new Genre();
+		genre.setGenreName(genreName);// Assuming Genre constructor is similar to Language
 		int value = movieService.addMovieGenre(genre);
 		System.out.println(value > 0 ? "Genre Added Successfully.." : "Genre not added..");
 	}
 
 	// Method for displaying all genres
 	public static void showGenres() {
+		System.out.println("=========================");
 		System.out.println("Genre Details Are :: ");
 		List<Genre> genres = movieService.getAllGenres(); // Assuming method exists in service
 		if (genres != null) {
 			genres.forEach(System.out::println);
 		} else {
-			logger.info("No Genre Found...");
+			System.out.println("No Genre Found");
+//			logger.info("No Genre Found...");
 		}
+		System.out.println("=========================");
 	}
 
 	// Method for updating an existing genre
 	public static void updateGenre() {
+		showGenres();
 		System.out.println("Enter Old Genre Name :: ");
 		String oldName = scn.nextLine();
 		System.out.println("Enter New Genre Name :: ");
@@ -89,24 +116,29 @@ public class AdminOperation {
 
 	// Method for deleting a genre
 	public static void deleteGenre() {
+		showGenres();
 		System.out.println("Enter Genre Name :: ");
 		String genreName = scn.nextLine();
-		int value = movieService.removeMovieGenre(new Genre(genreName));
+		Genre genre = new Genre();
+		genre.setGenreName(genreName);
+		int value = movieService.removeMovieGenre(genre);
 		System.out.println(value > 0 ? "Genre Deleted Successfully.." : "Genre not deleted..");
 	}
-
+	
+	//Method for add movie
 	public static void addMovies() {
-		// Taking movie title input
+
+		showMovies();
 		System.out.println("Enter Movie Title: ");
 		String title = scn.nextLine();
 
 		System.out.println("Enter Movie Duration (hh:mm:ss): ");
 		String duration = scn.nextLine();
-		Time timeDuration = Time.valueOf(duration); // Convert String to Time
+		Time timeDuration = Time.valueOf(duration);
 
 		System.out.println("Enter Language Name: ");
 		String languageName = scn.nextLine();
-		Language lang = new Language(languageName); // Create a Language object using the name
+		Language lang = new Language(languageName);
 
 		System.out.println("Enter Release Date (YYYY-MM-DD): ");
 		String releaseDate = scn.nextLine();
@@ -114,7 +146,8 @@ public class AdminOperation {
 
 		System.out.println("Enter Genre Name: ");
 		String genreName = scn.nextLine();
-		Genre gen = new Genre(genreName); // Create a Genre object using the name
+		Genre gen = new Genre();
+		gen.setGenreName(genreName);
 
 		Movies movie = new Movies(0, title, timeDuration, lang, dateRelease, gen);
 
@@ -123,61 +156,341 @@ public class AdminOperation {
 		System.out.println(value > 0 ? "Movie Added Successfully!" : "Movie could not be added.");
 	}
 
+	//Method for show all movies
 	public static void showMovies() {
+		System.out.println("=========================");
 		System.out.println("Movie Details: ");
 		List<Movies> movies = movieService.getAllMovies(); // Fetches all movies from the database
 		if (movies != null && !movies.isEmpty()) {
-			movies.forEach(System.out::println); // Print each movie object using toString()
+			movies.forEach(System.out::println);
 		} else {
-			logger.info("No Movies Found.");
+			System.out.println("No Movies Found");
+//			logger.info("No Movies Found.");
 		}
+		System.out.println("=========================");
 	}
 
+	//Method for update movie details
 	public static void updateMovie() {
+		showMovies();
 
 		System.out.println("Enter Movie ID to Update: ");
 		int movieId = scn.nextInt();
-		scn.nextLine(); // Consume the newline character
+		scn.nextLine();
 
 		System.out.println("Enter New Movie Title: ");
 		String newTitle = scn.nextLine();
 
 		System.out.println("Enter New Movie Duration (hh:mm:ss): ");
 		String newDuration = scn.nextLine();
-		Time duration = Time.valueOf(newDuration); // Convert String to Time
+		Time duration = Time.valueOf(newDuration);
 
-		// Accept new Language name instead of language ID
 		System.out.println("Enter New Language Name: ");
-		String newLanguageName = scn.nextLine(); // Accept language name as input
-		Language lang = new Language(newLanguageName); // Create a Language object using the name
+		String newLanguageName = scn.nextLine();
+		Language lang = new Language(newLanguageName);
 
 		System.out.println("Enter New Release Date (YYYY-MM-DD): ");
 		String newReleaseDate = scn.nextLine();
-		Date releaseDate = Date.valueOf(newReleaseDate); // Convert String to Date
+		Date releaseDate = Date.valueOf(newReleaseDate);
 
-		// Accept new Genre name instead of genre ID
 		System.out.println("Enter New Genre Name: ");
-		String newGenreName = scn.nextLine(); // Accept genre name as input
-		Genre genre = new Genre(newGenreName); // Create a Genre object using the name
+		String newGenreName = scn.nextLine();
+		Genre genre = new Genre();
+		genre.setGenreName(newGenreName);
 
-		// Create the updated Movie object with the new data
 		Movies updatedMovie = new Movies(movieId, newTitle, duration, lang, releaseDate, genre);
 
-		// Assuming the update method in movieService will handle the DB update
 		int value = movieService.updateMovie(updatedMovie);
 
-		// Print success/failure message based on the result of the update operation
 		System.out.println(value > 0 ? "Movie Updated Successfully!" : "Movie could not be updated.");
 	}
 
+	//Method for delete movie
 	public static void deleteMovie() {
+		showMovies();
 		System.out.println("Enter Movie ID to Delete: ");
 		int movieId = scn.nextInt();
 
 		// Assuming delete method in movieService
-		int value = movieService.removeMovie(movieId); // This method should handle DB delete
+		int value = movieService.removeMovie(movieId);
 
 		System.out.println(value > 0 ? "Movie Deleted Successfully!" : "Movie could not be deleted.");
 	}
+
+	//Method for add cinema 
+	public static void addCinema() {
+		showCinemas();
+		System.out.println("Enter cinema name: ");
+		String cinemaName = scn.nextLine();
+
+		System.out.println("Enter cinema location: ");
+		String cinemaLoc = scn.nextLine();
+
+		System.out.println("Enter cinema contact number: ");
+		String cinemaCont = scn.nextLine();
+
+		Cinema cinema = new Cinema(0, cinemaName, cinemaLoc, cinemaCont);
+
+		int value = cinemaService.addCinema(cinema);
+
+		System.out.println(value > 0 ? "Cinema Added Successfully!" : "Cinema could not be added.");
+	}
+
+	//Method for show all cinemas 
+	public static void showCinemas() {
+		System.out.println("=========================");
+		System.out.println("Cinema Details Are :: ");
+
+		List<Cinema> cinemas = cinemaService.getAllCinema();
+		if (cinemas != null && !cinemas.isEmpty()) {
+			cinemas.forEach(System.out::println);
+		} else {
+			System.out.println("No Cinemas Found.");
+		}
+		System.out.println("=========================");
+	}
+
+	// Method for upadte cinema details
+	public static void updateCinema() {
+		showCinemas();
+
+		System.out.println("Enter Cinema ID to Update: ");
+		int cinemaId = scn.nextInt();
+		scn.nextLine(); // Clear buffer
+
+		System.out.println("Enter Updated Cinema Name: ");
+		String name = scn.nextLine();
+
+		System.out.println("Enter Updated Cinema Location: ");
+		String location = scn.nextLine();
+
+		System.out.println("Enter Updated Cinema Contact: ");
+		String contact = scn.nextLine();
+
+		Cinema cinema = new Cinema(cinemaId, name, location, contact);
+
+		int value = cinemaService.updateCinema(cinema);
+
+		System.out.println(value > 0 ? "Cinema Updated Successfully!" : "Cinema could not be updated.");
+	}
+
+	//Method for delete cinema
+	public static void deleteCinema() {
+		showCinemas();
+		System.out.println("Enter Cinema ID to Remove: ");
+		int cinemaId = scn.nextInt();
+		scn.nextLine();
+		int value = cinemaService.removeCinema(cinemaId);
+		System.out.println(value > 0 ? "Cinema Removed Successfully!" : "Cinema could not be removed.");
+	}
+
+	// Method to add a new showtime
+    public static void addShowtime() {
+        try {
+            showCinemas();
+            System.out.println("Enter Cinema ID: ");
+            int cinemaId = scn.nextInt();
+            scn.nextLine();
+
+         // Fetch Cinema details
+            Cinema cinema = cinemaService.getCinemaById(cinemaId);
+            if (cinema == null) {
+                System.out.println("Invalid Cinema ID.");
+                return;
+            }
+
+            showMovies();
+            System.out.println("Enter Movie ID: ");
+            int movieId = scn.nextInt();
+            scn.nextLine();
+            
+         // Fetch Movie details
+            Movies movie = movieService.getMovieById(movieId);
+            if (movie == null) {
+                System.out.println("Invalid Movie ID.");
+                return;
+            }
+
+            System.out.println("Enter Show Date (YYYY-MM-DD): ");
+            String dateInput = scn.nextLine();
+            Date showDate = Date.valueOf(dateInput);
+
+            System.out.println("Enter Show Start Time (hh:mm:ss): ");
+            String startTimeInput = scn.nextLine();
+            Time showStartTime = Time.valueOf(startTimeInput);
+
+            System.out.println("Enter Show End Time (hh:mm:ss): ");
+            String endTimeInput = scn.nextLine();
+            Time showEndTime = Time.valueOf(endTimeInput);
+
+            Showtime showtime = new Showtime(0, movieId, cinemaId, showDate, showStartTime, showEndTime, movie, cinema);
+            int result = showtimeService.addShowtime(showtime);
+            System.out.println(result > 0 ? "Showtime added successfully!" : "Failed to add showtime.");
+        } catch (Exception e) {
+            System.out.println("Error while adding showtime: " + e.getMessage());
+        }
+    }
+
+    //Method to show all showtimes
+    public static void showAllShowtimes() {
+        try {
+    	    System.out.println("=========================");
+            List<Showtime> showtimes = showtimeService.getAllShowtimes();
+            if (showtimes.isEmpty()) {
+                System.out.println("No showtimes found.");
+            } else {
+                showtimes.forEach(System.out::println);
+        	    System.out.println("=========================");
+
+            }
+        } catch (Exception e) {
+            System.out.println("Error while fetching showtimes: " + e.getMessage());
+        }
+    }
+
+    //Mthod to get showtime by Id
+    public static void getShowtimeById() {
+        try {
+            System.out.println("Enter Showtime ID: ");
+            int showtimeId = scn.nextInt();
+            scn.nextLine();
+
+            Showtime showtime = showtimeService.getShowtimeById(showtimeId);
+            if (showtime != null) {
+                System.out.println(showtime);
+            } else {
+                System.out.println("No showtime found with the given ID.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error while fetching showtime: " + e.getMessage());
+        }
+    }
+
+    //Method to update showtime
+    public static void updateShowtime() {
+        try {
+        	showAllShowtimes();
+            System.out.println("Enter Showtime ID to update: ");
+            int showtimeId = scn.nextInt();
+            scn.nextLine();
+
+            Showtime existingShowtime = showtimeService.getShowtimeById(showtimeId);
+            if (existingShowtime == null) {
+                System.out.println("Showtime with given ID not found.");
+                return;
+            }
+
+            System.out.println("Enter New Cinema ID (Current: " + existingShowtime.getCinemaId() + "): ");
+            int cinemaId = scn.nextInt();
+            scn.nextLine();
+
+            System.out.println("Enter New Movie ID (Current: " + existingShowtime.getMovieId() + "): ");
+            int movieId = scn.nextInt();
+            scn.nextLine();
+
+            System.out.println("Enter New Show Date (YYYY-MM-DD) (Current: " + existingShowtime.getShowDate() + "): ");
+            String dateInput = scn.nextLine();
+            Date showDate = Date.valueOf(dateInput);
+
+            System.out.println("Enter New Show Start Time (hh:mm:ss) (Current: " + existingShowtime.getStartTime() + "): ");
+            String startTimeInput = scn.nextLine();
+            Time showStartTime = Time.valueOf(startTimeInput);
+
+            System.out.println("Enter New Show End Time (hh:mm:ss) (Current: " + existingShowtime.getEndTime() + "): ");
+            String endTimeInput = scn.nextLine();
+            Time showEndTime = Time.valueOf(endTimeInput);
+
+            Showtime updatedShowtime = new Showtime(showtimeId, movieId, cinemaId, showDate, showStartTime, showEndTime, null, null);
+            int result = showtimeService.updateShowtime(updatedShowtime);
+            System.out.println(result > 0 ? "Showtime updated successfully!" : "Failed to update showtime.");
+        } catch (Exception e) {
+            System.out.println("Error while updating showtime: " + e.getMessage());
+        }
+    }
+
+    //Method to deleye showtime 
+    public static void deleteShowtime() {
+        try {
+            System.out.println("Enter Showtime ID to delete: ");
+            int showtimeId = scn.nextInt();
+            scn.nextLine();
+
+            int result = showtimeService.deleteShowtime(showtimeId);
+            System.out.println(result > 0 ? "Showtime deleted successfully!" : "Failed to delete showtime.");
+        } catch (Exception e) {
+            System.out.println("Error while deleting showtime: " + e.getMessage());
+        }
+    }
+
+    // Method to add a seat for a specific showtime
+	public static void addSeat() { 
+		showAllShowtimes();
+	    System.out.println("Enter Showtime ID to Add Seat: ");
+	    int showtimeId = scn.nextInt();
+	    scn.nextLine(); // Clear buffer
+
+	    System.out.println("Enter Seat Number: ");
+	    String seatNumber = scn.nextLine();
+
+	    System.out.println("Is the Seat Available? (true/false): ");
+	    boolean isAvailable = scn.nextBoolean();
+	    scn.nextLine(); // Clear buffer
+
+	    Seat seat = new Seat(0, showtimeId, seatNumber, isAvailable);
+
+	    int value = seatService.addSeat(seat);
+
+	    System.out.println(value > 0 ? "Seat Added Successfully!" : "Seat could not be added.");
+	}
+
+	// Method to show all seats for a specific showtime
+	public static void showSeats() {
+		showAllShowtimes();
+	    System.out.println("Enter Showtime ID to View Seats: ");
+	    int showtimeId = scn.nextInt();
+	    scn.nextLine(); // Clear buffer
+	    System.out.println("=========================");
+
+	    List<Seat> seats = seatService.getSeatsByShowtimeId(showtimeId);
+
+	    System.out.println("Seats for Showtime ID: " + showtimeId);
+	    if (seats != null && !seats.isEmpty()) {
+	        seats.forEach(System.out::println);
+	    } else {
+	        System.out.println("No Seats Found for this Showtime.");
+	    }
+	    System.out.println("=========================");
+	}
+
+	// Method to update seat availability
+	public static void updateSeatAvailability() {
+	    showSeats();
+
+	    System.out.println("Enter Seat ID to Update Availability: ");
+	    int seatId = scn.nextInt();
+	    scn.nextLine(); // Clear buffer
+
+	    System.out.println("Is the Seat Available? (true/false): ");
+	    boolean isAvailable = scn.nextBoolean();
+	    scn.nextLine(); // Clear buffer
+
+	    int value = seatService.updateSeatAvailability(seatId, isAvailable);
+
+	    System.out.println(value > 0 ? "Seat Availability Updated Successfully!" : "Seat Availability could not be updated.");
+	}
+
+	// Method to delete a seat
+	public static void deleteSeat() {
+	    showSeats();
+
+	    System.out.println("Enter Seat ID to Remove: ");
+	    int seatId = scn.nextInt();
+	    scn.nextLine(); // Clear buffer
+
+	    int value = seatService.deleteSeat(seatId);
+
+	    System.out.println(value > 0 ? "Seat Removed Successfully!" : "Seat could not be removed.");
+	}
+
 
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Cinema {
 	private Integer cinemaId;
-	private String location;
-	private String contact;
+	private String cinameName;
+	private String cinemaLocation;
+	private String cinemaContact;
 }

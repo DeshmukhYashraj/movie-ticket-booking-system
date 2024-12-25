@@ -13,4 +13,9 @@ public class Booking {
 	private Integer bookingId;
 	private LocalDate bookingDate;
 	private Double totalCost;
+	
+	private UserModel userModel;
+	private Showtime showtime;
+	private Seat seat;
+	
 }

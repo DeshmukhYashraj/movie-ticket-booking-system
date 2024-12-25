@@ -31,5 +31,8 @@ public interface IAddMovieService {
 	public int updateMovie(Movies updatedMovie);
 
 	public int removeMovie(int movieId);
+	
+	public Movies getMovieById(int movieId);
+
 
 }

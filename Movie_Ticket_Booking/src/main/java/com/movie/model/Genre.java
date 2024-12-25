@@ -7,12 +7,19 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class Genre {
 	private int genreId;
-	@NonNull
 	private String genreName;
 
+	// Constructor
+    public Genre(String genreName) {
+        this.genreName = genreName;
+    }
+
+    // Getter
+    public String getGenreName() {
+        return genreName;
+    }
 }
