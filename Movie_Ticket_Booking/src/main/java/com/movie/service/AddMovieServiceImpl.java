@@ -79,4 +79,9 @@ public class AddMovieServiceImpl implements IAddMovieService {
 		return movieRepo.removeMovie(movieId);
 	}
 
+	@Override
+	public Movies getMovieById(int movieId) {
+		return movieRepo.getMovieById(movieId);
+	}
+
 }
