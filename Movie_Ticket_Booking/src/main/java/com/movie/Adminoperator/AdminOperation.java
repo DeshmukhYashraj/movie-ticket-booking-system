@@ -37,7 +37,7 @@ public class AdminOperation {
 //	static Logger logger = LoggerApp.getLogger();
 
 	// Method for adding a new language
-	public static void addLanguage() {
+	public static  void addLanguage() {
 		showLanguage();
 		System.out.println("Enter Language Name :: ");
 		String langName = scn.nextLine();
