@@ -4,7 +4,8 @@ import com.movie.model.Booking;
 import java.util.List;
 
 public interface IBookingRepository {
-	public boolean createBooking(Booking booking, int userId, int showtimeId, int seatId);
+	
+	public boolean createBooking(Booking booking);
 
 	public Booking getBookingByIds(int userId, int showtimeId, int seatId); // Read by Booking ID
 

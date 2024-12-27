@@ -17,6 +17,7 @@ import com.movie.model.Seat;
 import com.movie.model.Showtime;
 import com.movie.repository.AddCinemaRepositoryImpl;
 import com.movie.repository.IAddCinemaRepository;
+import com.movie.repository.IFeedbackRepository;
 import com.movie.service.AddCinemaServiceImpl;
 import com.movie.service.AddMovieServiceImpl;
 import com.movie.service.IAddCinemaService;
@@ -32,6 +33,7 @@ public class AdminOperation {
 	static IAddCinemaService cinemaService = new AddCinemaServiceImpl();
 	static IAddSeatService seatService = new SeatServiceImpl();
 	static IShowtimeService showtimeService = new ShowtimeServiceImpl();
+	
 //	static Logger logger = LoggerApp.getLogger();
 
 	// Method for adding a new language
@@ -127,7 +129,6 @@ public class AdminOperation {
 	
 	//Method for add movie
 	public static void addMovies() {
-
 		showMovies();
 		System.out.println("Enter Movie Title: ");
 		String title = scn.nextLine();
@@ -492,5 +493,11 @@ public class AdminOperation {
 	    System.out.println(value > 0 ? "Seat Removed Successfully!" : "Seat could not be removed.");
 	}
 
+	
+	public static void AddFeedback() {
+		System.out.println("Please write your feedback: ");
+		String feedb = scn.nextLine();
+	
+	}
 
 }

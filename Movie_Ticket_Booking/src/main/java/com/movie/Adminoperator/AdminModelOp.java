@@ -20,8 +20,9 @@ public class AdminModelOp {
 			System.out.println("4 :: Add Cinema Details :: ");
 			System.out.println("5 :: Add Showtime Cinema Wise :: ");
 			System.out.println("6 :: Add Seat Details :: ");
-//			System.out.println("7 :: Add Cinema Details :: ");
-			System.out.println("8 :: Exit");
+			System.out.println("7 :: Add Booking Details :: ");
+			System.out.println("8 :: Add feedback details ::");
+			System.out.println("9 :: Exit");
 			int value = scn.nextInt();
 			switch (value) {
 			case 1:
@@ -46,7 +47,11 @@ public class AdminModelOp {
 			case 6:
 				AdminOperationImpl.manageSeats();
 				break;
-			case 10:
+			case 7:
+				break;
+			case 8:
+				break;
+			case 9:
 				System.out.println("Exiting Genre Management... Goodbye!");
 				return;
 

@@ -10,7 +10,7 @@ import java.util.List;
 public class BookingRepositoryImpl extends DBState implements IBookingRepository {
 
 	@Override
-	public boolean createBooking(Booking booking, int userId, int showtimeId, int seatId) {
+	public boolean createBooking(Booking booking) {
 		// TODO Auto-generated method stub
 		return false;
 	}
