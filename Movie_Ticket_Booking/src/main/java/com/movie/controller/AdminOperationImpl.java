@@ -1,4 +1,4 @@
-package com.movie.Adminoperator;
+package com.movie.controller;
 
 import java.util.Scanner;
 
@@ -239,5 +239,19 @@ public class AdminOperationImpl {
 	    } while (true);
 	}
 
+	public static void manageFeedback() {
+		System.out.println("Welcome to feedback secsion");
+		System.out.println("1 :: Add feedback");
+		int value = scn.nextInt();
+
+		switch (value) {
+		case 1:
+			
+			break;
+
+		default:
+			break;
+		}
+	}
 	
 }

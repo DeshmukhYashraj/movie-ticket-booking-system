@@ -32,6 +32,12 @@ public interface IAddMovieRepository {
 	public int removeMovie(int movieId);
 
 	public Movies getMovieById(int movieId);
+	
+	public Movies getMovieByName(String movieName);
+	
+	public void movieFinderByLanguage(String name);
+	
+	public void movieFinderByGenre(String gname);
 
 }
 

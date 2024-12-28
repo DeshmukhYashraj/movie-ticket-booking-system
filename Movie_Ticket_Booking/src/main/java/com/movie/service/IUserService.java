@@ -8,4 +8,8 @@ public interface IUserService  {
 
 	public boolean validateUserLogin(String email, String password);
 	
+	public UserModel getUserByUsername(String username);
+
+	 public int getUserIdByEmail(String email);
+	
 }

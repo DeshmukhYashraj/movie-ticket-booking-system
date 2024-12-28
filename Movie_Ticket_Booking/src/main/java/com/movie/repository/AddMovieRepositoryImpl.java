@@ -41,6 +41,11 @@ public class AddMovieRepositoryImpl extends DBState implements IAddMovieReposito
 	private static final String DELETE_MOVIE = "DELETE FROM MOVIES WHERE MOVIE_ID = ?";
 	private static final String GET_MOVIE_BY_ID = "SELECT m.movie_id, m.title, m.duration, l.language_id, l.language_name, m.release_date, g.genre_id,"
 			+ "g.genre_name FROM movies m JOIN languages l ON m.language_id = l.language_id JOIN genres g ON m.genre_id = g.genre_id WHERE m.movie_id = ?";
+	private static final String GET_MOVIE_BY_NAME = "SELECT * FROM movies WHERE title = ?";
+	
+	private static final String GET_MOVIES_BY_LANGUAGE = "SELECT * FROM MOVIES WHERE LANGUAGE_ID=?";
+	private static final String GET_MOVIES_BY_GENRE = "SELECT * FROM MOVIES  WHERE GENRE_ID=?";
+
 
 //	Logger logger = LoggerApp.getLogger();
 
@@ -373,5 +378,140 @@ public class AddMovieRepositoryImpl extends DBState implements IAddMovieReposito
 		}
 
 		return movie;
+	}
+	
+	@Override
+	public Movies getMovieByName(String movieName) {
+       
+        try {
+        	ps = con.prepareStatement(GET_MOVIE_BY_NAME);
+            ps.setString(1, movieName);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Movies movie = new Movies();
+                movie.setMovieId(rs.getInt("movie_id"));
+                movie.setTitle(rs.getString("title"));
+                return movie;
+            }
+		} catch (Exception e) {
+			System.out.println("Error is "+e.getMessage());
+		}
+        return null;
+    }
+
+	private static int getLanguageById(String lname) {
+		try {
+			ps = con.prepareStatement("select * from languages where language_name=?");
+			ps.setString(1, lname);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int lid = rs.getInt(1);
+				return lid;
+			}
+
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+
+		}
+		return 0;
+
+	}
+
+	@Override
+	public void movieFinderByLanguage(String name) {
+
+		int llid = AddMovieRepositoryImpl.getLanguageById(name);
+		System.out.println(llid);
+
+		try {
+
+			ps = con.prepareStatement(GET_MOVIES_BY_LANGUAGE);
+			ps.setInt(1, llid);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				java.sql.Time duration = rs.getTime("duration");
+				Movies m = new Movies();
+				m.setTitle(rs.getString("title"));
+				m.setDuration(duration);
+				// moviesList.add(m);
+
+				// m.setLanguage(rs.getInt("language_id"));
+				System.out.println(rs.getString("title") + "\t\t\t" + duration + "\t\t\t" + rs.getInt("language_id"));
+				System.out.println("--------------------------------------------------------------------------------");
+				System.out.printf("%-30s %-20s %-15s%n", "Title", "Duration (mins)");
+				System.out.println("--------------------------------------------------------------------------------");
+
+				while (rs.next()) {
+				    String title = rs.getString("title");
+				    
+				    System.out.printf("%-30s %-20d %-15d%n", title, duration);
+				}
+
+				System.out.println("--------------------------------------------------------------------------------");
+
+			}
+			System.out.println();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static int getGenreById(String gname) {
+		try {
+			ps = con.prepareStatement("select * from genres where genre_name=?");
+			ps.setString(1, gname);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				int gid = rs.getInt(1);
+				return gid;
+			}
+
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+
+		}
+		return 0;
+
+	}
+
+	@Override
+	public void movieFinderByGenre(String gname) {
+
+		int ggid = AddMovieRepositoryImpl.getGenreById(gname);
+		System.out.println(ggid);
+
+		try {
+		    ps = con.prepareStatement(GET_MOVIES_BY_GENRE);
+		    ps.setInt(1, ggid);
+		    rs = ps.executeQuery();
+
+		    // Print table header
+		    System.out.println("-------------------------------------------------------------");
+		    System.out.printf("%-30s %-20s %-15s%n", "Title", "Duration");
+		    System.out.println("-------------------------------------------------------------");
+
+		    while (rs.next()) {
+		        java.sql.Time duration = rs.getTime("duration");
+		        Movies m = new Movies();
+		        m.setTitle(rs.getString("title"));
+		        m.setDuration(duration);
+
+		        // Print each movie's details
+		        System.out.printf("%-30s %-20s %-15d%n", 
+		                          rs.getString("title"), 
+		                          duration  );
+		    }
+
+		    System.out.println("-------------------------------------------------------------");
+
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
+
 	}
 }

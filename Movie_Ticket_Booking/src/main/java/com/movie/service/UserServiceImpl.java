@@ -19,4 +19,14 @@ public class UserServiceImpl implements IUserService {
     public boolean validateUserLogin(String email, String password) {
         return userRepository.validateUserLogin(email, password);
     }
+
+	@Override
+	public UserModel getUserByUsername(String username) {
+		return userRepository.getUserByUsername(username);
+	}
+
+	@Override
+	public int getUserIdByEmail(String email) {
+		return userRepository.getUserIdByEmail(email);
+	}
 }

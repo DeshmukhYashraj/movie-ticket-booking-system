@@ -2,8 +2,6 @@ package com.movie.operator;
 
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
 import com.movie.model.AdminModel;
 import com.movie.service.AdminServiceImpl;
 import com.movie.service.IAdminService;
@@ -54,7 +52,7 @@ public class AdminPannelOperations {
             // Check admin credentials through service
             if (adminService.adminLogin(username, password)) {
 //                logger.info("✅ Admin login successful: " + username);
-                System.out.println("✅ Login successful. Welcome "+username+"!");
+                System.out.println("\n\t✅ Login successful. Welcome "+username+"!");
                 return true;
             } else {
 //                logger.warn("❌ Admin login failed: Invalid credentials for " + username);

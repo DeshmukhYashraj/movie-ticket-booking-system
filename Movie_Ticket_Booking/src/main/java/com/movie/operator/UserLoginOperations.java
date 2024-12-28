@@ -2,8 +2,6 @@ package com.movie.operator;
 
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
 import com.movie.service.IUserService;
 import com.movie.service.UserServiceImpl;
 
@@ -14,7 +12,8 @@ public class UserLoginOperations {
 
     private static IUserService userService = new UserServiceImpl();
 
-    public static boolean userLogin() {
+    public static String userLogin() {
+    	String userEmail=null;
         try {
             System.out.print("Enter Email: "); // Ask for email instead of username
             String email = sc.nextLine();
@@ -24,18 +23,29 @@ public class UserLoginOperations {
 
             if (userService.validateUserLogin(email, password)) {
 //                logger.info("✅ User login successful: " + email);
-                System.out.println("✅ Login successful! Welcome back.");
-                return true;
+            	// Get user ID by email (assuming this method exists in the service)
+                int userId = userService.getUserIdByEmail(email);
+                
+                // Set the logged-in user's ID in the session
+//                UserSession.setLoggedInUserId(userId);
+                System.out.println("\n\t✅ Login successful! Welcome back.");
+                return email;
             } else {
 //                logger.warn("❌ User login failed: Invalid credentials for " + email);
-                System.out.println("❌ Invalid email or password. Please try again.");
-                return false;
+//                System.out.println("❌ Invalid email or password. Please try again.");
+                return null;
             }
         } catch (Exception e) {
 //            logger.error("❌ Error during user login", e);
             System.out.println("❌ An unexpected error occurred. Please try again later.");
-            return false;
+            return null;
         }
+    }
+    
+    public static void userLogout() {
+        // Log out the user and reset the session
+        UserSession.logOut();
+        System.out.println("You have successfully logged out.");
     }
 
 }

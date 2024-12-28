@@ -33,6 +33,12 @@ public interface IAddMovieService {
 	public int removeMovie(int movieId);
 	
 	public Movies getMovieById(int movieId);
+	
+	public void movieFinderByLanguage(String name);
+	
+	public Movies getMovieByName(String movieName);
+	
+	public void movieFinderByGenre(String gname);
 
 
 }

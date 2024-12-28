@@ -7,17 +7,22 @@ import com.movie.model.Showtime;
 public interface IShowtimeRepository {
 
     // Add a new Showtime
-    int addShowtime(Showtime showtime) ;
+    public int addShowtime(Showtime showtime) ;
 
     // Retrieve all Showtimes
-    List<Showtime> getAllShowtimes();
+    public List<Showtime> getAllShowtimes();
 
     // Retrieve a specific Showtime by ID
-    Showtime getShowtimeById(int showtimeId);
+    public Showtime getShowtimeById(int showtimeId);
 
     // Update an existing Showtime
-    int updateShowtime(Showtime showtime);
+    public int updateShowtime(Showtime showtime);
 
     // Remove a Showtime by ID
-    int deleteShowtime(int showtimeId);
+    public int deleteShowtime(int showtimeId);
+    
+    
+    public List<Showtime> getAllShowtimesByCinema(String movieName, String cinemaName);
+    
+    
 }

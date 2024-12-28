@@ -4,8 +4,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
 import com.movie.model.UserModel;
 import com.movie.service.IUserService;
 import com.movie.service.UserServiceImpl;

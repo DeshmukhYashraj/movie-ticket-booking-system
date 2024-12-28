@@ -1,6 +1,8 @@
 package com.movie.repository;
 
 import java.util.List;
+
+import com.movie.model.Booking;
 import com.movie.model.Seat;
 
 public interface ISeatRepository {
@@ -12,4 +14,7 @@ public interface ISeatRepository {
 	public int updateSeatAvailability(int seatId, boolean isAvailable);
 
 	public int deleteSeat(int seatId);
+	
+	public List<Seat> showSeatsAvailable(int showtimeId);
+	public boolean bookMySeat(Booking book);
 }

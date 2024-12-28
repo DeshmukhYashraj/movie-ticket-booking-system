@@ -84,4 +84,20 @@ public class AddMovieServiceImpl implements IAddMovieService {
 		return movieRepo.getMovieById(movieId);
 	}
 
+	@Override
+	public void movieFinderByLanguage(String name) {
+		
+		movieRepo.movieFinderByLanguage(name);
+	}
+
+	@Override
+	public void movieFinderByGenre(String gname) {
+		movieRepo.movieFinderByGenre(gname);
+	}
+
+	@Override
+	public Movies getMovieByName(String movieName) {
+		return movieRepo.getMovieByName(movieName);
+	}
+
 }

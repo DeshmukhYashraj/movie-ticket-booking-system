@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 import com.movie.config.DBState;
 import com.movie.model.AdminModel;
-import org.apache.log4j.Logger;
 
 public class AdminRepositoryImpl extends DBState implements IAdminRepository {
 

@@ -3,6 +3,7 @@ package com.movie.service;
 import java.util.List;
 
 import com.movie.model.Cinema;
+import com.movie.model.Seat;
 import com.movie.repository.AddCinemaRepositoryImpl;
 import com.movie.repository.IAddCinemaRepository;
 
@@ -35,4 +36,10 @@ public class AddCinemaServiceImpl implements IAddCinemaService{
 		return cinemaRepo.getCinemaById(cinemaId);
 	}
 
+	@Override
+	public List<Cinema> getCinemaByMovie(String movieName) {
+		return cinemaRepo.getCinemaByMovie(movieName);
+	}
+
+	
 }

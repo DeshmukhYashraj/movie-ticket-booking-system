@@ -21,4 +21,6 @@ public interface IShowtimeService {
 
 	// Remove a Showtime by ID
 	int deleteShowtime(int showtimeId) throws SQLException;
+	
+	public List<Showtime> getAllShowtimesByCinema(String movieName, String cinemaName);
 }

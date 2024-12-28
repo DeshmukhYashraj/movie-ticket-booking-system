@@ -11,8 +11,10 @@ public class Feedback {
 	private Integer feedbackId;
 	private String feedbackText;
 	private Integer rating;
+	private Integer userId;
+	private String movieName;
 	
-	private UserModel user;
-	private Movies movie;
+//	private UserModel user;
+//	private Movies movie;s
 	
 }

@@ -48,4 +48,47 @@ public class UserRepositoryImpl extends DBState implements IUserRepository {
         }
     }
 
+    // Method to get a user by their username
+    public UserModel getUserByUsername(String username) {
+        String query = "SELECT * FROM user WHERE username = ?";
+        UserModel user = null;
+        
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                user = new UserModel();
+                user.setUserId(rs.getInt("user_id"));  
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setRegisteredDate(rs.getDate("registered_date"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return user;
+    }
+    
+    @Override
+    public int getUserIdByEmail(String email) {
+        String query = "SELECT user_id FROM user WHERE email = ?";
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("user_id"); // Return the user_id
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; 
+    }
+
 }

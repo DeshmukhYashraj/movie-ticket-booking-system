@@ -41,4 +41,9 @@ public class ShowtimeServiceImpl implements IShowtimeService {
     public int deleteShowtime(int showtimeId) throws SQLException {
         return showtimeRepo.deleteShowtime(showtimeId);
     }
+
+	@Override
+	public List<Showtime> getAllShowtimesByCinema(String movieName, String cinemaName) {
+		return showtimeRepo.getAllShowtimesByCinema(movieName, cinemaName);
+	}
 }

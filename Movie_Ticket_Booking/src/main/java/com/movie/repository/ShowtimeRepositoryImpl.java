@@ -16,7 +16,7 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 	private static final String GET_ALL_SHOWTIMES = "SELECT s.showtime_id, s.movie_id, s.cinema_id, s.show_date, s.start_time, s.end_time, " +
 			"m.title AS movie_title, m.duration AS movie_duration, l.language_name AS movie_language, " +
 			"m.release_date AS movie_releaseDate, g.genre_name AS genre_name, " +
-			"c.cinameName AS cinema_name, c.cinema_location AS cinema_location " +
+			"c.cinemaName AS cinema_name, c.cinema_location AS cinema_location " +
 			"FROM showtimes s " +
 			"JOIN movies m ON s.movie_id = m.movie_id " +
 			"JOIN languages l ON m.language_id = l.language_id " +
@@ -27,9 +27,11 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 	private static final String DELETE_SHOWTIME = "DELETE FROM showtimes WHERE showtime_id = ?";
 	private static final String GET_SHOWTIME_BY_ID = "SELECT s.showtime_id, s.movie_id, s.cinema_id, s.show_date, s.start_time, s.end_time, "
 			+ "m.title AS movie_title, m.duration AS movie_duration,l.language_name AS movie_language, "
-			+ "c.cinameName AS cinema_name, c.cinema_Location AS cinema_location FROM showtimes s "
+			+ "c.cinemaName AS cinema_name, c.cinema_Location AS cinema_location FROM showtimes s "
 			+ "JOIN movies m ON s.movie_id = m.movie_id JOIN cinema c ON s.cinema_id = c.cinema_id"
 			+ "JOIN languages l ON m.language_id = l.language_id";
+	
+	private static final String GET_TIME_BY_CINEMA ="SELECT *FROM SHOWTIMES WHERE MOVIE_ID = ? && CINEMA_ID = ?";
 //	private static final String GET_SHOWTIME_BY_ID ="SELECT * FROM showtimes WHERE showtime_Id = ?";
 
 	@Override
@@ -38,9 +40,9 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 			ps = con.prepareStatement(INSERT_SHOWTIME);
 			ps.setInt(1, showtime.getMovieId());
 			ps.setInt(2, showtime.getCinemaId());
-			ps.setDate(3, showtime.getShowDate());
-			ps.setTime(4, showtime.getStartTime());
-			ps.setTime(5, showtime.getEndTime());
+			ps.setString(3, showtime.getShowDate());
+			ps.setString(4, showtime.getStartTime());
+			ps.setString(5, showtime.getEndTime());
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,9 +87,9 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 		                rs.getInt("showtime_id"),
 		                rs.getInt("movie_id"),
 		                rs.getInt("cinema_id"),
-		                rs.getDate("show_date"),
-		                rs.getTime("start_time"),
-		                rs.getTime("end_time"),
+		                rs.getString("show_date"),
+		                rs.getString("start_time"),
+		                rs.getString("end_time"),
 		                movie,   // Set the movie object here
 		                cinema   // Set the cinema object here
 		            );
@@ -105,9 +107,9 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 			ps = con.prepareStatement(UPDATE_SHOWTIME);
 			ps.setInt(1, showtime.getMovieId());
 			ps.setInt(2, showtime.getCinemaId());
-			ps.setDate(3, showtime.getShowDate());
-			ps.setTime(4, showtime.getStartTime());
-			ps.setTime(5, showtime.getEndTime());
+			ps.setString(3, showtime.getShowDate());
+			ps.setString(4, showtime.getStartTime());
+			ps.setString(5, showtime.getEndTime());
 			ps.setInt(6, showtime.getShowtimeId());
 			return ps.executeUpdate();
 		} catch (SQLException e) {
@@ -153,7 +155,7 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 
 				// Create and return the `Showtime` object
 				return new Showtime(rs.getInt("showtime_id"), rs.getInt("movie_id"), rs.getInt("cinema_id"),
-						rs.getDate("show_date"), rs.getTime("start_time"), rs.getTime("end_time"), movie, cinema);
+						rs.getString("show_date"), rs.getString("start_time"), rs.getString("end_time"), movie, cinema);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -169,4 +171,71 @@ public class ShowtimeRepositoryImpl extends DBState implements IShowtimeReposito
 		}
 		return null;
 	}
+
+	
+	@Override
+	public List<Showtime> getAllShowtimesByCinema(String movieName, String cinemaName) {
+
+		List<Showtime> times = null;
+		try {
+			int movieId=getMovieIdByName(movieName);
+			int cinemaId=getCinemaIdBYName(cinemaName);
+			ps = con.prepareStatement(GET_TIME_BY_CINEMA);
+			ps.setInt(1, movieId);
+			ps.setInt(2, cinemaId);
+			rs = ps.executeQuery();
+			times=new ArrayList<Showtime>();
+			while (rs.next()) {
+				Showtime st = new Showtime();
+				st.setShowtimeId(rs.getInt("showtime_id"));
+	            st.setShowDate(rs.getString("show_date"));
+	            st.setStartTime(rs.getString("start_time"));
+	            st.setEndTime(rs.getString("end_time"));
+	            
+	            times.add(st);
+			}
+		} catch (Exception e) {
+			System.out.println("Error is "+e.getMessage());
+		}
+		
+		return times;
+	}
+	
+	
+	public int getMovieIdByName(String movieName) {
+		String query = "SELECT MOVIE_ID FROM MOVIES WHERE TITLE = ?";
+		int movieId = 0;
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, movieName);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+	            movieId = rs.getInt("movie_id");  
+	        }
+	    } catch (Exception e) {
+	        System.out.println("Error is in getMovieIdByName()"+e.getMessage());  // Print the exception for debugging
+	    }
+
+	    return movieId;
+	}
+	
+	public int getCinemaIdBYName(String cinemaName) {
+		String query = "select cinema_id from cinema where cinemaName = ?";
+		int cinemaId = 0;
+		try {
+			ps = con.prepareStatement(query);
+			ps.setString(1, cinemaName);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+	            cinemaId = rs.getInt("cinema_id");  
+	        }
+	    } catch (Exception e) {
+//	        e.printStackTrace();  // Print the exception for debugging
+	        System.out.println("Error is in getCinemaIdBYName()"+e.getMessage());  // Print the exception for debugging
+	    }
+	    return cinemaId;
+	}
 }
+
+
+
